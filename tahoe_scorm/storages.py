@@ -13,7 +13,7 @@ def tahoe_scorm_storage(xblock):
     from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 
     current_site = get_site_for_course(xblock.course_id)
-    site_config = SiteConfiguration.objects.get(site=site)
+    site_config = SiteConfiguration.objects.get(site=current_site)
     sub_folder = site_config.get_value('SCORM_DIR', False)
     if not sub_folder:
         raise ScormException(
