@@ -1,0 +1,2 @@
+class ScormException(Exception):
+    pass
