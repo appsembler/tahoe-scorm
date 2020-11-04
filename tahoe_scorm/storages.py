@@ -23,6 +23,7 @@ def tahoe_scorm_storage(xblock):
     storage_class = get_storage_class(settings.DEFAULT_FILE_STORAGE)
     return storage_class(
         location=storage_location,
+        default_acl='public-read',
         base_url='{media_url}/{sub_folder}'.format(
             media_url=settings.MEDIA_URL,
             sub_folder=sub_folder,
