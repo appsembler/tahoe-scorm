@@ -14,7 +14,7 @@ def tahoe_scorm_storage(xblock):
 
     current_site = get_site_for_course(xblock.course_id)
     site_config = SiteConfiguration.objects.get(site=current_site)
-    scorm_sub_folder = settings.TAHOE_SCORM_XBLOCK_ROOT_DIR
+    scorm_sub_folder = getattr(settings, "TAHOE_SCORM_XBLOCK_ROOT_DIR", False)
     site_scorm_folder = site_config.get_value('course_org_filter', False)
     if not scorm_sub_folder:
         raise ScormException(
