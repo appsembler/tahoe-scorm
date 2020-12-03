@@ -14,18 +14,26 @@ def tahoe_scorm_storage(xblock):
 
     current_site = get_site_for_course(xblock.course_id)
     site_config = SiteConfiguration.objects.get(site=current_site)
-    sub_folder = site_config.get_value('SCORM_DIR', False)
-    if not sub_folder:
+    scorm_sub_folder = settings.TAHOE_SCORM_XBLOCK_ROOT_DIR
+    site_scorm_folder = site_config.get_value('course_org_filter', False)
+    if not scorm_sub_folder:
         raise ScormException(
-            'SCORM_DIR is not defined in SiteConfiguration. Please fix it so tahoe_scorm_storage works.'
+            'TAHOE_SCORM_XBLOCK_ROOT_DIR is not defined in Django settings. Please fix it so tahoe_scorm_storage works.'
         )
-    storage_location = os.path.join(settings.MEDIA_ROOT, sub_folder)
+    if not site_scorm_folder:
+        raise ScormException(
+            'course_org_filter is not defined in SiteConfiguration. Please fix it so tahoe_scorm_storage works.'
+        )
+
     storage_class = get_storage_class(settings.DEFAULT_FILE_STORAGE)
+    storage_location = os.path.join(scorm_sub_folder, "test-site") # replace with TAHOE_SCORM_XBLOCK_ROOT_DIR and course_org_filter
+    if settings.SERVICE_VARIANT == "lms":
+        s3_custom_domain = current_site.domain
+    else:
+        s3_custom_domain = settings.SITE_NAME
+
     return storage_class(
         location=storage_location,
         default_acl='public-read',
-        base_url='{media_url}/{sub_folder}'.format(
-            media_url=settings.MEDIA_URL,
-            sub_folder=sub_folder,
-        )
+        custom_domain=s3_custom_domain
     )
