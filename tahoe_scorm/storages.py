@@ -28,11 +28,13 @@ def tahoe_scorm_storage(xblock):
 
     if not scorm_sub_folder:
         raise ScormException(
-            'TAHOE_SCORM_XBLOCK_ROOT_DIR is not defined in Django settings. Please fix it so tahoe_scorm_storage works.'
+            'TAHOE_SCORM_XBLOCK_ROOT_DIR is not defined in Django settings. '
+            'Please fix it so tahoe_scorm_storage works.'
         )
     if not site_scorm_folder:
         raise ScormException(
-            'course_org_filter is not defined in SiteConfiguration. Please fix it so tahoe_scorm_storage works.'
+            'course_org_filter is not defined in SiteConfiguration. '
+            'Please fix it so tahoe_scorm_storage works.'
         )
 
     # in Tahoe we use 'storages.backends.s3boto3.S3Boto3Storage'
