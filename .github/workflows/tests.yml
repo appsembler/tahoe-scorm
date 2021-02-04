@@ -1,0 +1,22 @@
+name: tahoe-scorm tests
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-versions: [2.7, 3.5, 3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }} ${{ matrix.tox-env }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-versions }}
+      - name: Install dependencies
+        run: |
+          pip install tox
+      - name: Run tox
+        run: |
+          tox
