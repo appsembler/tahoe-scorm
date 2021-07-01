@@ -1,6 +1,6 @@
 import os
 
-from exceptions import ScormException
+from .exceptions import ScormException
 
 
 def tahoe_scorm_storage(xblock):
