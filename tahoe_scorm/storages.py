@@ -15,27 +15,20 @@ def tahoe_scorm_storage(xblock):
     from django.conf import settings
     from django.core.files.storage import get_storage_class
     from openedx.core.djangoapps.appsembler.api.sites import get_site_for_course
-    from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 
     # retrieve the site based on the course site id, it will work in the LMS and Studio as well.
     current_site = get_site_for_course(xblock.course_id)
-    site_config = SiteConfiguration.objects.get(site=current_site)
 
     # the root dir inside the S3 bucket, configurable in global settings
-    scorm_sub_folder = getattr(settings, "TAHOE_SCORM_XBLOCK_ROOT_DIR", False)
-    # we use the same course filter as customer SCORM folder folder
-    site_scorm_folder = site_config.get_value('course_org_filter', False)
-
+    scorm_sub_folder = getattr(settings, "TAHOE_SCORM_XBLOCK_ROOT_DIR", None)
     if not scorm_sub_folder:
         raise ScormException(
             'TAHOE_SCORM_XBLOCK_ROOT_DIR is not defined in Django settings. '
             'Please fix it so tahoe_scorm_storage works.'
         )
-    if not site_scorm_folder:
-        raise ScormException(
-            'course_org_filter is not defined in SiteConfiguration. '
-            'Please fix it so tahoe_scorm_storage works.'
-        )
+
+    # we use course organization id filter as customer SCORM folder
+    site_scorm_folder = str(xblock.course_id.org)
 
     # in Tahoe we use 'storages.backends.s3boto3.S3Boto3Storage'
     storage_class = get_storage_class(settings.DEFAULT_FILE_STORAGE)
