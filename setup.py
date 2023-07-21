@@ -9,7 +9,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='tahoe-scorm',
-    version='0.1.4',
+    version='0.2.0',
     description='Tahoe SCORM Customizations package.',
     packages=[
         'tahoe_scorm',
