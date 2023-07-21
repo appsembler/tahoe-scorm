@@ -4,10 +4,11 @@ on: push
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-versions: [2.7, 3.5, 3.8]
+        containers: [python:2.7.18-buster, python:3.5.10-buster, python:3.8.12-buster]
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }} ${{ matrix.tox-env }}
@@ -20,3 +21,4 @@ jobs:
       - name: Run tox
         run: |
           tox
+    container: ${{ matrix.containers }}
